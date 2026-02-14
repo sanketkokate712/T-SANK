@@ -12,6 +12,8 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@react-three/rapier": "^2.2.0",
+    "@stripe/react-stripe-js": "^5.6.0",
+    "@stripe/stripe-js": "^8.7.0",
     "@types/aos": "^3.0.7",
     "aos": "^2.3.4",
     "firebase": "^12.9.0",
@@ -25,6 +27,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-rnd": "^10.5.2",
+    "stripe": "^20.3.1",
     "three": "^0.182.0"
   },
   "devDependencies": {

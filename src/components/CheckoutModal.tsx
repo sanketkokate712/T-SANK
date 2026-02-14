@@ -225,7 +225,6 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                     <h2 className="font-[family-name:var(--font-heading)] text-base tracking-[0.15em] text-white">
                                         {step === "address" ? "SHIPPING DETAILS" : "ORDER SUMMARY"}
                                     </h2>
-                                    {/* Step indicators */}
                                     <div className="flex gap-1.5">
                                         <div className={`w-2 h-2 rounded-full transition-colors ${step === "address" ? "bg-accent-red" : "bg-neutral-700"}`} />
                                         <div className={`w-2 h-2 rounded-full transition-colors ${step === "summary" ? "bg-accent-red" : "bg-neutral-700"}`} />
@@ -241,7 +240,6 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                 </button>
                             </div>
 
-                            {/* Step 1: Address Form */}
                             <AnimatePresence mode="wait">
                                 {step === "address" && (
                                     <motion.div
@@ -251,90 +249,38 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                         exit={{ opacity: 0, x: -20 }}
                                         className="p-6 space-y-4"
                                     >
-                                        {/* Full Name */}
                                         <div>
                                             <label className={labelClass}>FULL NAME</label>
-                                            <input
-                                                type="text"
-                                                value={address.fullName}
-                                                onChange={(e) => updateField("fullName", e.target.value)}
-                                                placeholder="Sanket Kokate"
-                                                className={inputClass}
-                                            />
+                                            <input type="text" value={address.fullName} onChange={(e) => updateField("fullName", e.target.value)} placeholder="Sanket Kokate" className={inputClass} />
                                         </div>
-
-                                        {/* Phone + Email row */}
                                         <div className="grid grid-cols-2 gap-3">
                                             <div>
                                                 <label className={labelClass}>PHONE</label>
-                                                <input
-                                                    type="tel"
-                                                    value={address.phone}
-                                                    onChange={(e) => updateField("phone", e.target.value)}
-                                                    placeholder="+91 9876543210"
-                                                    className={inputClass}
-                                                />
+                                                <input type="tel" value={address.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="+91 9876543210" className={inputClass} />
                                             </div>
                                             <div>
                                                 <label className={labelClass}>EMAIL</label>
-                                                <input
-                                                    type="email"
-                                                    value={address.email}
-                                                    onChange={(e) => updateField("email", e.target.value)}
-                                                    placeholder="you@email.com"
-                                                    className={inputClass}
-                                                />
+                                                <input type="email" value={address.email} onChange={(e) => updateField("email", e.target.value)} placeholder="you@email.com" className={inputClass} />
                                             </div>
                                         </div>
-
-                                        {/* Address */}
                                         <div>
                                             <label className={labelClass}>STREET ADDRESS</label>
-                                            <textarea
-                                                value={address.address}
-                                                onChange={(e) => updateField("address", e.target.value)}
-                                                placeholder="House no, Street name, Landmark..."
-                                                rows={2}
-                                                className={`${inputClass} resize-none`}
-                                            />
+                                            <textarea value={address.address} onChange={(e) => updateField("address", e.target.value)} placeholder="House no, Street name, Landmark..." rows={2} className={`${inputClass} resize-none`} />
                                         </div>
-
-                                        {/* City + State + Pincode */}
                                         <div className="grid grid-cols-3 gap-3">
                                             <div>
                                                 <label className={labelClass}>CITY</label>
-                                                <input
-                                                    type="text"
-                                                    value={address.city}
-                                                    onChange={(e) => updateField("city", e.target.value)}
-                                                    placeholder="Mumbai"
-                                                    className={inputClass}
-                                                />
+                                                <input type="text" value={address.city} onChange={(e) => updateField("city", e.target.value)} placeholder="Mumbai" className={inputClass} />
                                             </div>
                                             <div>
                                                 <label className={labelClass}>STATE</label>
-                                                <input
-                                                    type="text"
-                                                    value={address.state}
-                                                    onChange={(e) => updateField("state", e.target.value)}
-                                                    placeholder="Maharashtra"
-                                                    className={inputClass}
-                                                />
+                                                <input type="text" value={address.state} onChange={(e) => updateField("state", e.target.value)} placeholder="Maharashtra" className={inputClass} />
                                             </div>
                                             <div>
                                                 <label className={labelClass}>PINCODE</label>
-                                                <input
-                                                    type="text"
-                                                    value={address.pincode}
-                                                    onChange={(e) => updateField("pincode", e.target.value)}
-                                                    placeholder="400001"
-                                                    maxLength={6}
-                                                    className={inputClass}
-                                                />
+                                                <input type="text" value={address.pincode} onChange={(e) => updateField("pincode", e.target.value)} placeholder="400001" maxLength={6} className={inputClass} />
                                             </div>
                                         </div>
-
-                                        {/* Continue button */}
                                         <div className="pt-2 space-y-3">
                                             <button
                                                 onClick={() => setStep("summary")}
@@ -344,17 +290,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                                 <span className="relative z-10">CONTINUE TO PAYMENT</span>
                                                 <div className="absolute inset-0 bg-gradient-to-r from-accent-red-bright to-accent-red opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                             </button>
-                                            <button
-                                                onClick={onClose}
-                                                className="w-full border border-white/10 text-text-secondary font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] py-3 hover:border-white/20 hover:text-white transition-all duration-300"
-                                            >
+                                            <button onClick={onClose} className="w-full border border-white/10 text-text-secondary font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] py-3 hover:border-white/20 hover:text-white transition-all duration-300">
                                                 BACK TO CART
                                             </button>
                                         </div>
                                     </motion.div>
                                 )}
 
-                                {/* Step 2: Order Summary + Pay */}
                                 {step === "summary" && (
                                     <motion.div
                                         key="summary"
@@ -362,100 +304,52 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: 20 }}
                                     >
-                                        {/* Shipping address preview */}
                                         <div className="p-6 pb-0">
                                             <div className="bg-neutral-carbon/50 border border-white/5 rounded-sm p-4 mb-4">
                                                 <div className="flex items-center justify-between mb-2">
-                                                    <h3 className="font-[family-name:var(--font-heading)] text-[10px] tracking-[0.3em] text-text-muted">
-                                                        DELIVERING TO
-                                                    </h3>
-                                                    <button
-                                                        onClick={() => setStep("address")}
-                                                        className="font-[family-name:var(--font-heading)] text-[9px] tracking-[0.2em] text-accent-red hover:text-accent-red-bright transition-colors"
-                                                    >
-                                                        EDIT
-                                                    </button>
+                                                    <h3 className="font-[family-name:var(--font-heading)] text-[10px] tracking-[0.3em] text-text-muted">DELIVERING TO</h3>
+                                                    <button onClick={() => setStep("address")} className="font-[family-name:var(--font-heading)] text-[9px] tracking-[0.2em] text-accent-red hover:text-accent-red-bright transition-colors">EDIT</button>
                                                 </div>
-                                                <p className="font-[family-name:var(--font-body)] text-sm text-white tracking-wider">
-                                                    {address.fullName}
-                                                </p>
-                                                <p className="font-[family-name:var(--font-body)] text-[12px] text-text-secondary tracking-wider mt-1">
-                                                    {address.address}
-                                                </p>
-                                                <p className="font-[family-name:var(--font-body)] text-[12px] text-text-secondary tracking-wider">
-                                                    {address.city}, {address.state} — {address.pincode}
-                                                </p>
-                                                <p className="font-[family-name:var(--font-body)] text-[12px] text-text-muted tracking-wider mt-1">
-                                                    📞 {address.phone} · ✉ {address.email}
-                                                </p>
+                                                <p className="font-[family-name:var(--font-body)] text-sm text-white tracking-wider">{address.fullName}</p>
+                                                <p className="font-[family-name:var(--font-body)] text-[12px] text-text-secondary tracking-wider mt-1">{address.address}</p>
+                                                <p className="font-[family-name:var(--font-body)] text-[12px] text-text-secondary tracking-wider">{address.city}, {address.state} — {address.pincode}</p>
+                                                <p className="font-[family-name:var(--font-body)] text-[12px] text-text-muted tracking-wider mt-1">📞 {address.phone} · ✉ {address.email}</p>
                                             </div>
                                         </div>
 
-                                        {/* Items */}
                                         <div className="p-6 pt-0 space-y-4">
-                                            <h3 className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.3em] text-text-muted">
-                                                ITEMS ({totalItems})
-                                            </h3>
-
+                                            <h3 className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.3em] text-text-muted">ITEMS ({totalItems})</h3>
                                             {items.map((item) => (
                                                 <div key={`${item.product.id}-${item.size}`} className="flex items-center gap-4">
                                                     <div className="relative w-14 h-14 flex-shrink-0 overflow-hidden rounded-sm bg-neutral-carbon">
-                                                        <Image
-                                                            src={item.product.image}
-                                                            alt={item.product.name}
-                                                            fill
-                                                            sizes="56px"
-                                                            className="object-cover"
-                                                        />
+                                                        <Image src={item.product.image} alt={item.product.name} fill sizes="56px" className="object-cover" />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.1em] text-white truncate">
-                                                            {item.product.name}
-                                                        </p>
-                                                        <p className="font-[family-name:var(--font-body)] text-[11px] text-text-muted tracking-wider">
-                                                            Size: {item.size} × {item.quantity}
-                                                        </p>
+                                                        <p className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.1em] text-white truncate">{item.product.name}</p>
+                                                        <p className="font-[family-name:var(--font-body)] text-[11px] text-text-muted tracking-wider">Size: {item.size} × {item.quantity}</p>
                                                     </div>
-                                                    <span className="font-[family-name:var(--font-heading)] text-sm text-white">
-                                                        ₹{item.product.price * item.quantity}
-                                                    </span>
+                                                    <span className="font-[family-name:var(--font-heading)] text-sm text-white">₹{item.product.price * item.quantity}</span>
                                                 </div>
                                             ))}
 
-                                            {/* Divider */}
                                             <div className="h-[1px] bg-white/8 my-4" />
-
-                                            {/* Totals */}
                                             <div className="space-y-2">
                                                 <div className="flex justify-between">
-                                                    <span className="font-[family-name:var(--font-body)] text-sm text-text-secondary tracking-wider">
-                                                        Subtotal ({totalItems} items)
-                                                    </span>
-                                                    <span className="font-[family-name:var(--font-heading)] text-sm text-white">
-                                                        ₹{totalPrice}
-                                                    </span>
+                                                    <span className="font-[family-name:var(--font-body)] text-sm text-text-secondary tracking-wider">Subtotal ({totalItems} items)</span>
+                                                    <span className="font-[family-name:var(--font-heading)] text-sm text-white">₹{totalPrice}</span>
                                                 </div>
                                                 <div className="flex justify-between">
-                                                    <span className="font-[family-name:var(--font-body)] text-sm text-text-secondary tracking-wider">
-                                                        Shipping
-                                                    </span>
-                                                    <span className="font-[family-name:var(--font-body)] text-sm text-green-400 tracking-wider">
-                                                        FREE
-                                                    </span>
+                                                    <span className="font-[family-name:var(--font-body)] text-sm text-text-secondary tracking-wider">Shipping</span>
+                                                    <span className="font-[family-name:var(--font-body)] text-sm text-green-400 tracking-wider">FREE</span>
                                                 </div>
                                                 <div className="h-[1px] bg-white/8" />
                                                 <div className="flex justify-between pt-2">
-                                                    <span className="font-[family-name:var(--font-heading)] text-sm tracking-[0.15em] text-white">
-                                                        TOTAL
-                                                    </span>
-                                                    <span className="font-[family-name:var(--font-heading)] text-xl font-bold text-white">
-                                                        ₹{totalPrice}
-                                                    </span>
+                                                    <span className="font-[family-name:var(--font-heading)] text-sm tracking-[0.15em] text-white">TOTAL</span>
+                                                    <span className="font-[family-name:var(--font-heading)] text-xl font-bold text-white">₹{totalPrice}</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Pay Button */}
                                         <div className="p-6 pt-0 space-y-3">
                                             <button
                                                 onClick={handlePay}
@@ -463,15 +357,10 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                                                 className="w-full bg-accent-red hover:bg-accent-red-bright disabled:opacity-50 disabled:cursor-not-allowed text-white font-[family-name:var(--font-heading)] text-[12px] tracking-[0.2em] py-4 transition-all duration-400 hover:shadow-[0_0_30px_rgba(183,28,28,0.5)] relative overflow-hidden group animate-glow-pulse"
                                                 id="pay-now-button"
                                             >
-                                                <span className="relative z-10">
-                                                    {loading ? "PROCESSING..." : "PAY NOW — ₹" + totalPrice}
-                                                </span>
+                                                <span className="relative z-10">{loading ? "PROCESSING..." : "PAY NOW — ₹" + totalPrice}</span>
                                                 <div className="absolute inset-0 bg-gradient-to-r from-accent-red-bright to-accent-red opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                             </button>
-                                            <button
-                                                onClick={() => setStep("address")}
-                                                className="w-full border border-white/10 text-text-secondary font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] py-3 hover:border-white/20 hover:text-white transition-all duration-300"
-                                            >
+                                            <button onClick={() => setStep("address")} className="w-full border border-white/10 text-text-secondary font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] py-3 hover:border-white/20 hover:text-white transition-all duration-300">
                                                 ← EDIT ADDRESS
                                             </button>
                                             <p className="font-[family-name:var(--font-body)] text-[10px] text-text-muted tracking-wider text-center">

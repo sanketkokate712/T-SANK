@@ -55,7 +55,7 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [authModalMode, setAuthModalMode] = useState<"signin" | "signup">("signin");
     const [profileOpen, setProfileOpen] = useState(false);
-    const [hasShownWelcome, setHasShownWelcome] = useState(false);
+
 
     // Listen to Firebase auth state
     useEffect(() => {
@@ -77,18 +77,7 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
         return () => unsub();
     }, []);
 
-    // Show sign-in popup on first visit (after load, if not signed in)
-    useEffect(() => {
-        if (!loading && !user && !hasShownWelcome) {
-            const timer = setTimeout(() => {
-                setHasShownWelcome(true);
-                setAuthModalOpen(true);
-                setAuthModalMode("signin");
-            }, 1500);
-            return () => clearTimeout(timer);
-        }
-        if (user) setHasShownWelcome(true);
-    }, [loading, user, hasShownWelcome]);
+
 
     const openAuthModal = useCallback((mode: "signin" | "signup" = "signin") => {
         setAuthModalMode(mode);
