@@ -51,14 +51,8 @@ export default function TestimonialCarousel() {
     }, [paused]);
 
     return (
-        <section className="py-20 md:py-28 px-6 md:px-10">
+        <section className="py-10 md:py-16 px-6 md:px-10">
             <div className="max-w-4xl mx-auto text-center">
-                <span className="font-[family-name:var(--font-body)] text-[11px] tracking-[0.5em] text-accent-red uppercase block mb-3">
-                    Testimonials
-                </span>
-                <h2 className="font-[family-name:var(--font-heading)] text-3xl md:text-4xl font-bold tracking-[0.06em] text-white mb-14">
-                    WHAT FANS SAY
-                </h2>
 
                 <div
                     ref={ref}
