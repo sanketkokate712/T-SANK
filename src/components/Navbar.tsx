@@ -84,25 +84,41 @@ export default function Navbar() {
                     </a>
                 </div>
 
-                {/* Mobile Hamburger */}
-                <button
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    className="md:hidden flex flex-col gap-1.5 w-8 h-8 items-center justify-center"
-                    aria-label="Toggle menu"
-                >
-                    <motion.span
-                        animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                        className="w-6 h-[1.5px] bg-white block"
-                    />
-                    <motion.span
-                        animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
-                        className="w-6 h-[1.5px] bg-white block"
-                    />
-                    <motion.span
-                        animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                        className="w-6 h-[1.5px] bg-white block"
-                    />
-                </button>
+                {/* Mobile Cart + Hamburger */}
+                <div className="flex md:hidden items-center gap-3">
+                    <button
+                        onClick={toggleCart}
+                        className="relative p-2 text-text-secondary hover:text-white transition-colors"
+                        aria-label="Open cart"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
+                        </svg>
+                        {totalItems > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-accent-red text-white text-[9px] font-[family-name:var(--font-heading)] w-5 h-5 flex items-center justify-center rounded-full">
+                                {totalItems}
+                            </span>
+                        )}
+                    </button>
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="flex flex-col gap-1.5 w-8 h-8 items-center justify-center"
+                        aria-label="Toggle menu"
+                    >
+                        <motion.span
+                            animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                            className="w-6 h-[1.5px] bg-white block"
+                        />
+                        <motion.span
+                            animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
+                            className="w-6 h-[1.5px] bg-white block"
+                        />
+                        <motion.span
+                            animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                            className="w-6 h-[1.5px] bg-white block"
+                        />
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Menu */}
