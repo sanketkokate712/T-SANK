@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Orbitron, Rajdhani } from "next/font/google";
 import "./globals.css";
+import ClientProviders from "@/components/ClientProviders";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -17,13 +18,13 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "Cinematic Transformer Sequence",
+  title: "T-SANK — Premium Transformers Merchandise",
   description:
-    "A frame-by-frame cinematic transformation — a mechanical truck becomes a humanoid robot across 40 meticulously directed frames.",
+    "Premium Transformers t-shirts and merchandise by Sanket Kokate. Shop Autobots, Decepticons and classic designs.",
   openGraph: {
-    title: "Cinematic Transformer Sequence",
+    title: "T-SANK — Premium Transformers Merchandise",
     description:
-      "Scroll-driven cinematic direction. Frame-by-frame transformation.",
+      "Scroll-driven cinematic direction. Premium Transformers merch for fans.",
     type: "website",
   },
 };
@@ -38,7 +39,7 @@ export default function RootLayout({
       <body
         className={`${orbitron.variable} ${rajdhani.variable} antialiased bg-base-dark text-white`}
       >
-        {children}
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

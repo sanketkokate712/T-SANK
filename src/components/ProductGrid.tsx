@@ -4,15 +4,24 @@ import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { PRODUCTS, CATEGORIES, Product } from "@/data/products";
+import { useCart } from "@/context/CartContext";
+import { useToast } from "@/context/ToastContext";
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
     const ref = useRef<HTMLDivElement>(null);
     const inView = useInView(ref, { once: true, margin: "-60px" });
     const [selectedSize, setSelectedSize] = useState(product.sizes[1] || product.sizes[0]);
+    const { addItem } = useCart();
+    const { showToast } = useToast();
 
     const tagClass = product.tag
         ? `tag-${product.tag.replace(/\s/g, ".")}`
         : "tag-default";
+
+    const handleAddToCart = () => {
+        addItem(product, selectedSize);
+        showToast(`${product.name} (${selectedSize}) added to cart!`, "success");
+    };
 
     return (
         <motion.div
@@ -51,7 +60,10 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                 <motion.div
                     className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0"
                 >
-                    <button className="w-full bg-accent-red hover:bg-accent-red-bright text-white font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] py-3 transition-colors duration-300 hover:shadow-[0_0_20px_rgba(183,28,28,0.4)]">
+                    <button
+                        onClick={handleAddToCart}
+                        className="w-full bg-accent-red hover:bg-accent-red-bright text-white font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] py-3 transition-colors duration-300 hover:shadow-[0_0_20px_rgba(183,28,28,0.4)]"
+                    >
                         ADD TO CART
                     </button>
                 </motion.div>
@@ -73,8 +85,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                             key={size}
                             onClick={() => setSelectedSize(size)}
                             className={`font-[family-name:var(--font-body)] text-[10px] tracking-[0.1em] w-8 h-8 flex items-center justify-center border transition-all duration-300 ${selectedSize === size
-                                    ? "border-accent-red bg-accent-red/20 text-white"
-                                    : "border-neutral-800 text-text-muted hover:border-neutral-700 hover:text-text-secondary"
+                                ? "border-accent-red bg-accent-red/20 text-white"
+                                : "border-neutral-800 text-text-muted hover:border-neutral-700 hover:text-text-secondary"
                                 }`}
                         >
                             {size}
@@ -140,8 +152,8 @@ export default function ProductGrid() {
                         key={cat.id}
                         onClick={() => setActiveCategory(cat.id)}
                         className={`font-[family-name:var(--font-heading)] text-[10px] tracking-[0.25em] px-5 py-2.5 border transition-all duration-400 ${activeCategory === cat.id
-                                ? "border-accent-red bg-accent-red/15 text-white"
-                                : "border-neutral-800 text-text-muted hover:border-neutral-700 hover:text-text-secondary"
+                            ? "border-accent-red bg-accent-red/15 text-white"
+                            : "border-neutral-800 text-text-muted hover:border-neutral-700 hover:text-text-secondary"
                             }`}
                     >
                         {cat.label}
