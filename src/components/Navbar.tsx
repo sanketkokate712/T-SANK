@@ -1,20 +1,41 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NAV_LINKS, STORE } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useSession, signIn } from "next-auth/react";
+import UserMenu from "@/components/UserMenu";
+import SearchOverlay from "@/components/SearchOverlay";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const { toggleCart, totalItems } = useCart();
+    const { data: session } = useSession();
+    const magnetRef = useRef<HTMLAnchorElement>(null);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 60);
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
+
+    // Magnetic cursor effect for CTA button
+    const handleMagneticMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const el = magnetRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+        const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+        el.style.transform = `translate(${x}px, ${y}px)`;
+    };
+
+    const handleMagneticLeave = () => {
+        if (magnetRef.current) {
+            magnetRef.current.style.transform = "translate(0px, 0px)";
+        }
+    };
 
     return (
         <motion.nav
@@ -53,6 +74,8 @@ export default function Navbar() {
                             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent-red group-hover:w-full transition-all duration-500" />
                         </a>
                     ))}
+                    {/* Search */}
+                    <SearchOverlay />
                     {/* Cart Button */}
                     <button
                         onClick={toggleCart}
@@ -76,9 +99,29 @@ export default function Navbar() {
                             )}
                         </AnimatePresence>
                     </button>
+                    {/* Auth */}
+                    {session ? (
+                        <UserMenu />
+                    ) : (
+                        <button
+                            onClick={() => signIn("google")}
+                            className="font-[family-name:var(--font-heading)] text-[10px] tracking-[0.2em] text-text-secondary hover:text-white transition-colors duration-300 flex items-center gap-2"
+                            id="sign-in-button"
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                            SIGN IN
+                        </button>
+                    )}
                     <a
+                        ref={magnetRef}
                         href="#shop"
+                        onMouseMove={handleMagneticMove}
+                        onMouseLeave={handleMagneticLeave}
                         className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] bg-accent-red hover:bg-accent-red-bright text-white px-5 py-2.5 transition-all duration-400 hover:shadow-[0_0_20px_rgba(183,28,28,0.4)]"
+                        style={{ transition: "transform 0.2s ease-out, background-color 0.4s, box-shadow 0.4s" }}
                     >
                         SHOP NOW
                     </a>
@@ -86,6 +129,7 @@ export default function Navbar() {
 
                 {/* Mobile Cart + Hamburger */}
                 <div className="flex md:hidden items-center gap-3">
+                    <SearchOverlay />
                     <button
                         onClick={toggleCart}
                         className="relative p-2 text-text-secondary hover:text-white transition-colors"
@@ -100,6 +144,20 @@ export default function Navbar() {
                             </span>
                         )}
                     </button>
+                    {session ? (
+                        <UserMenu />
+                    ) : (
+                        <button
+                            onClick={() => signIn("google")}
+                            className="p-2 text-text-secondary hover:text-white transition-colors"
+                            aria-label="Sign in"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </button>
+                    )}
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
                         className="flex flex-col gap-1.5 w-8 h-8 items-center justify-center"

@@ -3,14 +3,17 @@
 import { CartProvider } from "@/context/CartContext";
 import { ToastProvider } from "@/context/ToastContext";
 import CartDrawer from "@/components/CartDrawer";
+import AuthProvider from "@/components/AuthProvider";
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
     return (
-        <CartProvider>
-            <ToastProvider>
-                {children}
-                <CartDrawer />
-            </ToastProvider>
-        </CartProvider>
+        <AuthProvider>
+            <CartProvider>
+                <ToastProvider>
+                    {children}
+                    <CartDrawer />
+                </ToastProvider>
+            </CartProvider>
+        </AuthProvider>
     );
 }

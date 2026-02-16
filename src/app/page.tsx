@@ -6,6 +6,10 @@ import FeaturedCollection from "@/components/FeaturedCollection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
+import BackToTop from "@/components/BackToTop";
+import RevealOnScroll from "@/components/RevealOnScroll";
+
 
 export default function Home() {
   return (
@@ -26,7 +30,10 @@ export default function Home() {
         <HeroSection />
 
         {/* Featured Picks */}
-        <FeaturedCollection />
+        <RevealOnScroll>
+          <FeaturedCollection />
+        </RevealOnScroll>
+
 
         {/* Parallax Banner */}
         <ParallaxBanner
@@ -36,7 +43,9 @@ export default function Home() {
         />
 
         {/* Product Grid */}
-        <ProductGrid />
+        <RevealOnScroll>
+          <ProductGrid />
+        </RevealOnScroll>
 
         {/* Parallax Banner 2 */}
         <ParallaxBanner
@@ -45,11 +54,23 @@ export default function Home() {
           subtitle="Premium student merch"
         />
 
+
+        {/* Testimonials */}
+        <RevealOnScroll>
+          <TestimonialCarousel />
+        </RevealOnScroll>
+
         {/* About */}
-        <AboutSection />
+        <RevealOnScroll>
+          <AboutSection />
+        </RevealOnScroll>
+
 
         {/* Footer */}
         <Footer />
+
+        {/* Back to Top */}
+        <BackToTop />
       </main>
     </SmoothScroll>
   );

@@ -3,17 +3,11 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { STORE } from "@/data/products";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 export default function AboutSection() {
     const ref = useRef<HTMLDivElement>(null);
     const inView = useInView(ref, { once: true, margin: "-80px" });
-
-    const stats = [
-        { value: "500+", label: "Happy Customers" },
-        { value: "6", label: "Exclusive Designs" },
-        { value: "100%", label: "Premium Cotton" },
-        { value: "24h", label: "Fast Shipping" },
-    ];
 
     return (
         <section id="about" ref={ref} className="py-20 md:py-32 px-6 md:px-10">
@@ -57,29 +51,17 @@ export default function AboutSection() {
                         </div>
                     </motion.div>
 
-                    {/* Right — Stats */}
+                    {/* Right — Animated Stats */}
                     <motion.div
                         initial={{ opacity: 0, x: 40 }}
                         animate={inView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     >
                         <div className="grid grid-cols-2 gap-[1px] bg-neutral-800/30">
-                            {stats.map((stat, i) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ duration: 0.6, delay: 0.3 + i * 0.1 }}
-                                    className="bg-base-dark p-8 text-center group hover:bg-neutral-carbon/20 transition-colors duration-500"
-                                >
-                                    <span className="font-[family-name:var(--font-heading)] text-3xl md:text-4xl font-bold text-white group-hover:text-accent-red transition-colors duration-500 block mb-2">
-                                        {stat.value}
-                                    </span>
-                                    <span className="font-[family-name:var(--font-body)] text-[11px] tracking-[0.25em] text-text-muted uppercase">
-                                        {stat.label}
-                                    </span>
-                                </motion.div>
-                            ))}
+                            <AnimatedCounter end={500} suffix="+" label="Happy Customers" />
+                            <AnimatedCounter end={6} label="Exclusive Designs" />
+                            <AnimatedCounter end={100} suffix="%" label="Premium Cotton" />
+                            <AnimatedCounter end={24} suffix="h" label="Fast Shipping" />
                         </div>
                     </motion.div>
                 </div>
