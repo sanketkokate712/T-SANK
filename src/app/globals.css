@@ -1,26 +1,203 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-base-dark: #0b0b0b;
+  --color-base-darker: #050505;
+  --color-accent-red: #B71C1C;
+  --color-accent-red-bright: #E53935;
+  --color-accent-red-dim: #7a1212;
+  --color-accent-blue: #1565C0;
+  --color-accent-purple: #6A1B9A;
+  --color-neutral-carbon: #1a1a1a;
+  --color-neutral-800: #2a2a2a;
+  --color-neutral-700: #333333;
+  --color-neutral-600: #444444;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.6);
+  --color-text-muted: rgba(255, 255, 255, 0.35);
+  --color-glass-bg: rgba(11, 11, 11, 0.7);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-card-bg: #111111;
+  --color-card-hover: #181818;
+
+  --font-heading: var(--font-orbitron);
+  --font-body: var(--font-rajdhani);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base ── */
+html {
+  background: var(--color-base-dark);
+  scroll-behavior: auto;
+  /* Lenis handles this */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--color-base-dark);
+  color: var(--color-text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-accent-red);
+  color: white;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-base-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-800);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-red-dim);
+}
+
+/* ── Glassmorphism ── */
+.glass {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+/* ── Product Card ── */
+.product-card {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover {
+  background: var(--color-card-hover);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(183, 28, 28, 0.08);
+}
+
+/* ── Tag badges ── */
+.tag-badge {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.tag-BESTSELLER {
+  background: var(--color-accent-red);
+  color: white;
+}
+
+.tag-NEW {
+  background: var(--color-accent-blue);
+  color: white;
+}
+
+.tag-LIMITED {
+  background: var(--color-accent-purple);
+  color: white;
+}
+
+.tag-PREMIUM {
+  background: linear-gradient(135deg, #B71C1C, #6A1B9A);
+  color: white;
+}
+
+.tag-FAN\.FAVORITE,
+.tag-default {
+  background: var(--color-neutral-700);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Parallax Section ── */
+.parallax-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg {
+  position: absolute;
+  inset: -20%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+/* ── Glow ── */
+.text-glow-red {
+  text-shadow: 0 0 30px rgba(183, 28, 28, 0.5), 0 0 80px rgba(183, 28, 28, 0.2);
+}
+
+/* ── Animations ── */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
