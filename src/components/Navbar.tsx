@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NAV_LINKS, STORE } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const { toggleCart, totalItems } = useCart();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 60);
@@ -40,7 +42,7 @@ export default function Navbar() {
                 </a>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center gap-6">
                     {NAV_LINKS.map((link) => (
                         <a
                             key={link.href}
@@ -51,6 +53,29 @@ export default function Navbar() {
                             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent-red group-hover:w-full transition-all duration-500" />
                         </a>
                     ))}
+                    {/* Cart Button */}
+                    <button
+                        onClick={toggleCart}
+                        className="relative p-2 text-text-secondary hover:text-white transition-colors duration-300"
+                        aria-label="Open cart"
+                        id="cart-button"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
+                        </svg>
+                        <AnimatePresence>
+                            {totalItems > 0 && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    exit={{ scale: 0 }}
+                                    className="absolute -top-1 -right-1 bg-accent-red text-white text-[9px] font-[family-name:var(--font-heading)] w-5 h-5 flex items-center justify-center rounded-full"
+                                >
+                                    {totalItems}
+                                </motion.span>
+                            )}
+                        </AnimatePresence>
+                    </button>
                     <a
                         href="#shop"
                         className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.2em] bg-accent-red hover:bg-accent-red-bright text-white px-5 py-2.5 transition-all duration-400 hover:shadow-[0_0_20px_rgba(183,28,28,0.4)]"
