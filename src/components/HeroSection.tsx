@@ -229,25 +229,28 @@ export default function HeroSection() {
                             animate={{ opacity: 1, x: 0, scale: 1 }}
                             exit={{ opacity: 0, x: activePopup.position === "left" ? -40 : 40, scale: 0.95 }}
                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                            className={`absolute top-1/2 -translate-y-1/2 z-20 max-w-xs sm:max-w-sm ${activePopup.position === "left"
-                                    ? "left-5 sm:left-10 md:left-16"
-                                    : "right-5 sm:right-10 md:right-16"
+                            className={`absolute z-20
+                                bottom-16 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2
+                                max-w-[180px] sm:max-w-xs md:max-w-sm
+                                ${activePopup.position === "left"
+                                    ? "left-3 sm:left-10 md:left-16"
+                                    : "right-3 sm:right-10 md:right-16"
                                 }`}
                         >
-                            <div className="relative p-5 sm:p-6 bg-base-dark/80 backdrop-blur-xl border border-white/10 rounded-sm">
+                            <div className="relative p-3 sm:p-5 md:p-6 bg-base-dark/80 backdrop-blur-xl border border-white/10 rounded-sm">
                                 {/* Red accent bar */}
                                 <div className={`absolute top-0 ${activePopup.position === "left" ? "left-0" : "right-0"} w-[3px] h-full bg-accent-red`} />
                                 {/* Corner brackets */}
                                 <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-accent-red/50" />
                                 <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-accent-red/50" />
 
-                                <span className="font-[family-name:var(--font-body)] text-[9px] tracking-[0.5em] text-accent-red uppercase block mb-2">
+                                <span className="font-[family-name:var(--font-body)] text-[8px] sm:text-[9px] tracking-[0.3em] sm:tracking-[0.5em] text-accent-red uppercase block mb-1 sm:mb-2">
                                     FRAME {currentFrame + 1} / {TOTAL_FRAMES}
                                 </span>
-                                <h3 className="font-[family-name:var(--font-heading)] text-lg sm:text-xl tracking-[0.08em] text-white mb-2 text-glow-red">
+                                <h3 className="font-[family-name:var(--font-heading)] text-sm sm:text-lg md:text-xl tracking-[0.08em] text-white mb-1 sm:mb-2 text-glow-red">
                                     {activePopup.title}
                                 </h3>
-                                <p className="font-[family-name:var(--font-body)] text-sm text-text-secondary leading-relaxed">
+                                <p className="hidden sm:block font-[family-name:var(--font-body)] text-sm text-text-secondary leading-relaxed">
                                     {activePopup.text}
                                 </p>
                             </div>

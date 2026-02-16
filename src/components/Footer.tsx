@@ -12,7 +12,7 @@ export default function Footer() {
                 {/* Main Footer Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}
-                    <div className="sm:col-span-2 lg:col-span-1">
+                    <div className="sm:col-span-2 lg:col-span-1" data-aos="fade-up" data-aos-delay="0">
                         <div className="flex items-center gap-3 mb-5">
                             <div className="relative w-10 h-10 flex items-center justify-center">
                                 <div className="absolute inset-0 border-2 border-accent-red rotate-45" />
@@ -33,7 +33,7 @@ export default function Footer() {
                     </div>
 
                     {/* Quick Links */}
-                    <div>
+                    <div data-aos="fade-up" data-aos-delay="100">
                         <h4 className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.35em] text-text-secondary uppercase mb-5">
                             Quick Links
                         </h4>
@@ -52,7 +52,7 @@ export default function Footer() {
                     </div>
 
                     {/* Support */}
-                    <div>
+                    <div data-aos="fade-up" data-aos-delay="200">
                         <h4 className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.35em] text-text-secondary uppercase mb-5">
                             Support
                         </h4>
@@ -65,7 +65,7 @@ export default function Footer() {
                     </div>
 
                     {/* Newsletter */}
-                    <div>
+                    <div data-aos="fade-up" data-aos-delay="300">
                         <h4 className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.35em] text-text-secondary uppercase mb-5">
                             Stay Updated
                         </h4>

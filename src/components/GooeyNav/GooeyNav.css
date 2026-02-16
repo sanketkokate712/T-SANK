@@ -37,18 +37,20 @@
 
 .gooey-nav-container nav ul {
     display: flex;
-    gap: 2em;
+    gap: 0.5em;
     list-style: none;
-    padding: 0 1em;
+    padding: 0.4em;
     margin: 0;
     position: relative;
     z-index: 3;
-    color: white;
-    text-shadow: 0 1px 1px hsl(205deg 30% 10% / 0.2);
+    color: rgba(255, 255, 255, 0.5);
     font-family: var(--font-heading), system-ui, sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 100vw;
 }
 
 .gooey-nav-container nav ul li {
@@ -56,38 +58,41 @@
     position: relative;
     cursor: pointer;
     transition:
-        background-color 0.3s ease,
         color 0.3s ease,
         box-shadow 0.3s ease;
     box-shadow: 0 0 0.5px 1.5px transparent;
-    color: white;
 }
 
 .gooey-nav-container nav ul li a {
     display: inline-block;
-    padding: 0.6em 1em;
+    padding: 0.65em 1.2em;
     text-decoration: none;
     color: inherit;
 }
 
-.gooey-nav-container nav ul li:focus-within:has(:focus-visible) {
-    box-shadow: 0 0 0.5px 1.5px white;
+.gooey-nav-container nav ul li:hover {
+    color: rgba(255, 255, 255, 0.85);
 }
 
+.gooey-nav-container nav ul li:focus-within:has(:focus-visible) {
+    box-shadow: 0 0 0.5px 1.5px rgba(183, 28, 28, 0.5);
+}
+
+/* Active pill — red instead of white */
 .gooey-nav-container nav ul li::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 10px;
-    background: white;
+    border-radius: 100vw;
+    background: #B71C1C;
     opacity: 0;
-    transform: scale(0);
-    transition: all 0.3s ease;
+    transform: scale(0.85);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
 }
 
 .gooey-nav-container nav ul li.active {
-    color: black;
+    color: white;
     text-shadow: none;
 }
 
@@ -96,6 +101,7 @@
     transform: scale(1);
 }
 
+/* === Effect layers === */
 .gooey-nav-container .effect {
     position: absolute;
     left: 0;
@@ -116,12 +122,13 @@
 }
 
 .gooey-nav-container .effect.text.active {
-    color: black;
+    color: white;
 }
 
+/* Gooey filter — dark blend */
 .gooey-nav-container .effect.filter {
     filter: blur(7px) contrast(100) blur(0);
-    mix-blend-mode: lighten;
+    mix-blend-mode: normal;
 }
 
 .gooey-nav-container .effect.filter::before {
@@ -129,14 +136,14 @@
     position: absolute;
     inset: -75px;
     z-index: -2;
-    background: black;
+    background: transparent;
 }
 
 .gooey-nav-container .effect.filter::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: white;
+    background: #B71C1C;
     transform: scale(0);
     opacity: 0;
     z-index: -1;
@@ -144,7 +151,7 @@
 }
 
 .gooey-nav-container .effect.active::after {
-    animation: pill 0.3s ease both;
+    animation: pill 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes pill {
@@ -154,12 +161,13 @@
     }
 }
 
+/* === Particles === */
 .particle,
 .point {
     display: block;
     opacity: 0;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     border-radius: 100%;
     transform-origin: center;
 }
@@ -167,8 +175,8 @@
 .particle {
     --time: 5s;
     position: absolute;
-    top: calc(50% - 8px);
-    left: calc(50% - 8px);
+    top: calc(50% - 7px);
+    left: calc(50% - 7px);
     animation: particle calc(var(--time)) ease 1 -350ms;
 }
 
@@ -198,7 +206,7 @@
 
     100% {
         transform: rotate(calc(var(--rotate) * 1.2)) translate(calc(var(--end-x) * 0.5), calc(var(--end-y) * 0.5));
-        opacity: 1;
+        opacity: 0;
     }
 }
 

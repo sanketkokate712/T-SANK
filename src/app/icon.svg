@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#0a0a0a"/>
+  <g transform="translate(256,256) rotate(45)">
+    <rect x="-140" y="-140" width="280" height="280" fill="none" stroke="#B71C1C" stroke-width="18"/>
+    <rect x="-110" y="-110" width="220" height="220" fill="none" stroke="#B71C1C" stroke-width="6" opacity="0.4"/>
+  </g>
+  <text x="256" y="280" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="160" fill="white" letter-spacing="10">T</text>
+</svg>

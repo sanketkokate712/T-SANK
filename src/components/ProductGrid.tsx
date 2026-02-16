@@ -34,6 +34,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                 ease: [0.16, 1, 0.3, 1],
             }}
             className="product-card rounded-sm overflow-hidden group cursor-pointer"
+            data-aos="zoom-in-up"
+            data-aos-delay={`${index * 100}`}
         >
             {/* Image */}
             <div className="relative aspect-square overflow-hidden bg-neutral-carbon">
@@ -146,7 +148,7 @@ export default function ProductGrid() {
             </motion.div>
 
             {/* Category Filter */}
-            <div className="flex justify-center gap-2 mb-12 flex-wrap">
+            <div className="flex justify-center gap-2 mb-12 flex-wrap" data-aos="fade-up" data-aos-delay="100">
                 {CATEGORIES.map((cat) => (
                     <button
                         key={cat.id}

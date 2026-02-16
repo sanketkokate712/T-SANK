@@ -68,7 +68,7 @@ export default function FeaturedCollection() {
                     transition={{ duration: 0.8 }}
                     className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-4"
                 >
-                    <div>
+                    <div data-aos="fade-right" data-aos-delay="100">
                         <span className="font-[family-name:var(--font-body)] text-[11px] tracking-[0.5em] text-accent-red uppercase block mb-3">
                             Handpicked
                         </span>
@@ -79,6 +79,8 @@ export default function FeaturedCollection() {
                     <a
                         href="#shop"
                         className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.25em] text-text-secondary hover:text-accent-red transition-colors duration-400 group"
+                        data-aos="fade-left"
+                        data-aos-delay="200"
                     >
                         VIEW ALL →
                     </a>
@@ -86,6 +88,7 @@ export default function FeaturedCollection() {
 
                 {/* Cards with sparkle hover */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
                     {featured.map((product, i) => (
                         <motion.div
                             key={product.id}

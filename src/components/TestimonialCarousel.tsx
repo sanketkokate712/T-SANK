@@ -52,7 +52,7 @@ export default function TestimonialCarousel() {
 
     return (
         <section className="py-10 md:py-16 px-6 md:px-10">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
 
                 <div
                     ref={ref}

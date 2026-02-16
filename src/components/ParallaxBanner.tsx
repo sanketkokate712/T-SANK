@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 
 interface Props {
     imageSrc: string;
@@ -19,31 +20,38 @@ export default function ParallaxBanner({ imageSrc, title, subtitle }: Props) {
     const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0.3]);
     const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1, 1.1]);
-    const textY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
+    const textY = useTransform(scrollYProgress, [0, 0.5, 1], [40, 0, -40]);
 
     return (
         <section ref={ref} className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] overflow-hidden">
-            {/* Parallax BG with scale */}
+            {/* Parallax BG — Next.js Image for reliable loading */}
             <motion.div
-                className="absolute inset-[-20%] bg-cover bg-center will-change-transform"
-                style={{
-                    backgroundImage: `url(${imageSrc})`,
-                    y,
-                    scale,
-                }}
-            />
+                className="absolute inset-0 will-change-transform"
+                style={{ y, scale }}
+            >
+                <div className="absolute inset-[-25%]">
+                    <Image
+                        src={imageSrc}
+                        alt={title}
+                        fill
+                        sizes="100vw"
+                        className="object-cover object-center"
+                        priority
+                    />
+                </div>
+            </motion.div>
 
-            {/* Dark overlays */}
-            <div className="absolute inset-0 bg-base-dark/60" />
+            {/* Dark overlays for readability */}
+            <div className="absolute inset-0 bg-base-dark/55" />
             <div className="absolute inset-0 bg-gradient-to-r from-base-dark/80 via-transparent to-base-dark/80" />
-            <div className="absolute inset-0 bg-gradient-to-b from-base-dark/40 via-transparent to-base-dark/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-base-dark/60 via-transparent to-base-dark/60" />
 
-            {/* Content — centered, responsive, with parallax text */}
+            {/* Content */}
             <motion.div
                 className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 z-10"
                 style={{ opacity }}
             >
-                {/* Decorative line above subtitle */}
+                {/* Decorative line */}
                 <motion.div
                     className="w-10 sm:w-14 h-[2px] bg-accent-red mb-3 sm:mb-4"
                     style={{ y: textY }}
@@ -60,7 +68,6 @@ export default function ParallaxBanner({ imageSrc, title, subtitle }: Props) {
                 >
                     {title}
                 </motion.h2>
-                {/* Decorative line below title */}
                 <motion.div
                     className="w-10 sm:w-14 h-[2px] bg-accent-red mt-3 sm:mt-4"
                     style={{ y: textY }}

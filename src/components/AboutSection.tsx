@@ -41,7 +41,7 @@ export default function AboutSection() {
                                 {STORE.name} has you covered.
                             </p>
                         </div>
-                        <div className="mt-8">
+                        <div className="mt-8" data-aos="fade-up" data-aos-delay="300">
                             <a
                                 href="#shop"
                                 className="font-[family-name:var(--font-heading)] text-[12px] tracking-[0.2em] bg-accent-red hover:bg-accent-red-bright text-white px-8 py-3.5 transition-all duration-400 inline-block hover:shadow-[0_0_30px_rgba(183,28,28,0.5)]"
@@ -57,7 +57,7 @@ export default function AboutSection() {
                         animate={inView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        <div className="grid grid-cols-2 gap-[1px] bg-neutral-800/30">
+                        <div className="grid grid-cols-2 gap-[1px] bg-neutral-800/30" data-aos="fade-up" data-aos-delay="200">
                             <AnimatedCounter end={500} suffix="+" label="Happy Customers" />
                             <AnimatedCounter end={6} label="Exclusive Designs" />
                             <AnimatedCounter end={100} suffix="%" label="Premium Cotton" />
