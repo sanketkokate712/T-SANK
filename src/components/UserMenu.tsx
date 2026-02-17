@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useOrders } from "@/context/OrderContext";
 
 export default function UserMenu() {
     const { data: session } = useSession();
+    const { openOrders } = useOrders();
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -64,7 +66,13 @@ export default function UserMenu() {
                         </div>
 
                         {/* Actions */}
-                        <div className="p-2">
+                        <div className="p-2 space-y-0.5">
+                            <button
+                                onClick={() => { setOpen(false); openOrders(); }}
+                                className="w-full text-left px-3 py-2.5 font-[family-name:var(--font-heading)] text-[10px] tracking-[0.2em] text-text-secondary hover:text-accent-red hover:bg-white/5 transition-all duration-300 rounded-sm"
+                            >
+                                MY ORDERS
+                            </button>
                             <button
                                 onClick={() => signOut()}
                                 className="w-full text-left px-3 py-2.5 font-[family-name:var(--font-heading)] text-[10px] tracking-[0.2em] text-text-secondary hover:text-accent-red hover:bg-white/5 transition-all duration-300 rounded-sm"

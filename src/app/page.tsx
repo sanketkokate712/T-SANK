@@ -14,6 +14,7 @@ import FuzzyText from "@/components/FuzzyText";
 
 import ScrollFloat from "@/components/ScrollFloat/ScrollFloat";
 import FlowingMenu from "@/components/FlowingMenu/FlowingMenu";
+import CustomDesigner from "@/components/CustomDesigner";
 
 const flowingMenuItems = [
   { link: "#", text: "Autobots", image: "/images/transformer-sequence/30.jpg" },
@@ -26,6 +27,7 @@ const gooeyItems = [
   { label: "Home", href: "#" },
   { label: "Collection", href: "#collection" },
   { label: "Shop", href: "#shop" },
+  { label: "Custom", href: "#custom-design" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
@@ -190,6 +192,29 @@ export default function Home() {
         </section>
 
 
+        {/* ═══════════════════════════════════════════════════════════════
+            CUSTOM DESIGNER — design your own t-shirt
+        ═══════════════════════════════════════════════════════════════ */}
+        <section className="py-8 md:py-12">
+          <div className="flex justify-center pt-8 md:pt-12 pb-2">
+            <ScrollFloat
+              animationDuration={1}
+              ease="back.inOut(2)"
+              scrollStart="center bottom+=50%"
+              scrollEnd="bottom bottom-=40%"
+              stagger={0.03}
+              containerClassName="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest font-[family-name:var(--font-heading)]"
+            >
+              DESIGN YOUR OWN
+            </ScrollFloat>
+          </div>
+          <p className="text-center text-text-secondary text-sm md:text-base tracking-wider max-w-xl mx-auto px-6 mb-4">
+            Upload your artwork and create a unique, one-of-a-kind tee.
+          </p>
+          <RevealOnScroll>
+            <CustomDesigner />
+          </RevealOnScroll>
+        </section>
 
         {/* ═══════════════════════════════════════════════════════════════
             FLOWING MENU — category navigation

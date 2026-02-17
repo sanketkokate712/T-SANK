@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
+import { useOrders } from "@/context/OrderContext";
 import { useSession } from "next-auth/react";
 
 declare global {
@@ -52,6 +53,7 @@ interface AddressForm {
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     const { items, totalPrice, totalItems, clearCart, closeCart } = useCart();
     const { showToast } = useToast();
+    const { addOrder } = useOrders();
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState<"address" | "summary">("address");
@@ -157,6 +159,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     });
                     const result = await verifyRes.json();
                     if (result.verified) {
+                        addOrder(items, address, totalPrice, response.razorpay_payment_id, response.razorpay_order_id);
                         showToast("Payment successful! 🎉 Order confirmed.", "success");
                         clearCart();
                         closeCart();

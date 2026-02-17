@@ -7,7 +7,7 @@ export interface Product {
     tag?: string;
     description: string;
     sizes: string[];
-    category: "autobots" | "decepticons" | "classics";
+    category: "autobots" | "decepticons" | "classics" | "custom";
 }
 
 export const STORE = {
