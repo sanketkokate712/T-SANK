@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
 import { useOrders } from "@/context/OrderContext";
-import { useSession } from "next-auth/react";
+import { useFirebaseAuth } from "@/context/FirebaseAuthContext";
 
 declare global {
     interface Window {
@@ -54,13 +54,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     const { items, totalPrice, totalItems, clearCart, closeCart } = useCart();
     const { showToast } = useToast();
     const { addOrder } = useOrders();
-    const { data: session } = useSession();
+    const { user, openAuthModal } = useFirebaseAuth();
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState<"address" | "summary">("address");
     const [address, setAddress] = useState<AddressForm>({
-        fullName: session?.user?.name || "",
+        fullName: user?.displayName || "",
         phone: "",
-        email: session?.user?.email || "",
+        email: user?.email || "",
         address: "",
         city: "",
         state: "",
@@ -71,9 +71,9 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     const handleOpen = () => {
         setStep("address");
         setAddress({
-            fullName: session?.user?.name || "",
+            fullName: user?.displayName || "",
             phone: "",
-            email: session?.user?.email || "",
+            email: user?.email || "",
             address: "",
             city: "",
             state: "",
@@ -82,7 +82,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     };
 
     // Trigger reset when modal opens
-    if (isOpen && step === "address" && address.fullName === "" && session?.user?.name) {
+    if (isOpen && step === "address" && address.fullName === "" && user?.displayName) {
         handleOpen();
     }
 
@@ -118,6 +118,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     };
 
     const handlePay = async () => {
+        // Require login before payment
+        if (!user) {
+            onClose();
+            openAuthModal("signin");
+            showToast("Please sign in to complete your purchase", "error");
+            return;
+        }
         setLoading(true);
         try {
             const scriptLoaded = await loadRazorpayScript();
@@ -159,7 +166,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                     });
                     const result = await verifyRes.json();
                     if (result.verified) {
-                        addOrder(items, address, totalPrice, response.razorpay_payment_id, response.razorpay_order_id);
+                        await addOrder(items, address, totalPrice, response.razorpay_payment_id, response.razorpay_order_id);
                         showToast("Payment successful! 🎉 Order confirmed.", "success");
                         clearCart();
                         closeCart();
