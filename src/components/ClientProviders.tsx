@@ -5,24 +5,27 @@ import { ToastProvider } from "@/context/ToastContext";
 import { OrderProvider } from "@/context/OrderContext";
 import CartDrawer from "@/components/CartDrawer";
 import MyOrdersDrawer from "@/components/MyOrdersDrawer";
-import AuthProvider from "@/components/AuthProvider";
 import AOSProvider from "@/components/AOSProvider";
+import { FirebaseAuthProvider } from "@/context/FirebaseAuthContext";
+import AuthModal from "@/components/AuthModal";
+import ProfileModal from "@/components/ProfileModal";
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
     return (
-        <AuthProvider>
+        <FirebaseAuthProvider>
             <AOSProvider>
                 <CartProvider>
-                    <OrderProvider>
-                        <ToastProvider>
+                    <ToastProvider>
+                        <OrderProvider>
                             {children}
                             <CartDrawer />
                             <MyOrdersDrawer />
-                        </ToastProvider>
-                    </OrderProvider>
+                            <AuthModal />
+                            <ProfileModal />
+                        </OrderProvider>
+                    </ToastProvider>
                 </CartProvider>
             </AOSProvider>
-        </AuthProvider>
+        </FirebaseAuthProvider>
     );
 }
-

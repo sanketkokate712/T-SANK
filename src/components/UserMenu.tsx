@@ -2,12 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
+import { useFirebaseAuth } from "@/context/FirebaseAuthContext";
 import { useOrders } from "@/context/OrderContext";
 
 export default function UserMenu() {
-    const { data: session } = useSession();
+    const { user, signOut, openProfile } = useFirebaseAuth();
     const { openOrders } = useOrders();
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -22,7 +21,9 @@ export default function UserMenu() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    if (!session?.user) return null;
+    if (!user) return null;
+
+    const avatar = user.displayName ? user.displayName[0].toUpperCase() : (user.email ? user.email[0].toUpperCase() : "U");
 
     return (
         <div className="relative" ref={menuRef}>
@@ -31,19 +32,9 @@ export default function UserMenu() {
                 className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-transparent hover:border-accent-red transition-all duration-300"
                 aria-label="User menu"
             >
-                {session.user.image ? (
-                    <Image
-                        src={session.user.image}
-                        alt={session.user.name || "User"}
-                        fill
-                        sizes="32px"
-                        className="object-cover"
-                    />
-                ) : (
-                    <div className="w-full h-full bg-accent-red flex items-center justify-center text-white text-xs font-[family-name:var(--font-heading)]">
-                        {(session.user.name || "U")[0].toUpperCase()}
-                    </div>
-                )}
+                <div className="w-full h-full bg-accent-red flex items-center justify-center text-white text-xs font-[family-name:var(--font-heading)]">
+                    {avatar}
+                </div>
             </button>
 
             <AnimatePresence>
@@ -58,15 +49,21 @@ export default function UserMenu() {
                         {/* User info */}
                         <div className="p-4 border-b border-white/8">
                             <p className="font-[family-name:var(--font-heading)] text-[11px] tracking-[0.1em] text-white truncate">
-                                {session.user.name}
+                                {user.displayName || "USER"}
                             </p>
                             <p className="font-[family-name:var(--font-body)] text-[11px] text-text-muted tracking-wider truncate mt-1">
-                                {session.user.email}
+                                {user.email}
                             </p>
                         </div>
 
                         {/* Actions */}
                         <div className="p-2 space-y-0.5">
+                            <button
+                                onClick={() => { setOpen(false); openProfile(); }}
+                                className="w-full text-left px-3 py-2.5 font-[family-name:var(--font-heading)] text-[10px] tracking-[0.2em] text-text-secondary hover:text-accent-red hover:bg-white/5 transition-all duration-300 rounded-sm"
+                            >
+                                MY PROFILE
+                            </button>
                             <button
                                 onClick={() => { setOpen(false); openOrders(); }}
                                 className="w-full text-left px-3 py-2.5 font-[family-name:var(--font-heading)] text-[10px] tracking-[0.2em] text-text-secondary hover:text-accent-red hover:bg-white/5 transition-all duration-300 rounded-sm"
@@ -74,7 +71,7 @@ export default function UserMenu() {
                                 MY ORDERS
                             </button>
                             <button
-                                onClick={() => signOut()}
+                                onClick={() => { setOpen(false); signOut(); }}
                                 className="w-full text-left px-3 py-2.5 font-[family-name:var(--font-heading)] text-[10px] tracking-[0.2em] text-text-secondary hover:text-accent-red hover:bg-white/5 transition-all duration-300 rounded-sm"
                             >
                                 SIGN OUT

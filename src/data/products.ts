@@ -98,6 +98,7 @@ export const CATEGORIES = [
 
 export const NAV_LINKS = [
     { href: "#shop", label: "SHOP" },
+    { href: "/custom-design", label: "CUSTOM" },
     { href: "#collection", label: "COLLECTION" },
     { href: "#about", label: "ABOUT" },
     { href: "#contact", label: "CONTACT" },

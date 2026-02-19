@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NAV_LINKS, STORE } from "@/data/products";
 import { useCart } from "@/context/CartContext";
-import { useSession, signIn } from "next-auth/react";
+import { useFirebaseAuth } from "@/context/FirebaseAuthContext";
 import UserMenu from "@/components/UserMenu";
 import SearchOverlay from "@/components/SearchOverlay";
 
@@ -14,7 +14,7 @@ export default function Navbar() {
     const [hidden, setHidden] = useState(false);
     const [lastY, setLastY] = useState(0);
     const { toggleCart, totalItems } = useCart();
-    const { data: session } = useSession();
+    const { user, openAuthModal } = useFirebaseAuth();
 
     // Auto-hide on scroll down, show on scroll up
     useEffect(() => {
@@ -140,11 +140,11 @@ export default function Navbar() {
                         </button>
 
                         {/* Auth */}
-                        {session ? (
+                        {user ? (
                             <UserMenu />
                         ) : (
                             <button
-                                onClick={() => signIn("google")}
+                                onClick={() => openAuthModal("signin")}
                                 className="p-2.5 text-text-secondary hover:text-white transition-colors duration-300 hover:bg-white/5 rounded-lg"
                                 id="sign-in-button"
                                 aria-label="Sign in"
@@ -186,11 +186,11 @@ export default function Navbar() {
                         </button>
 
                         {/* Auth */}
-                        {session ? (
+                        {user ? (
                             <UserMenu />
                         ) : (
                             <button
-                                onClick={() => signIn("google")}
+                                onClick={() => openAuthModal("signin")}
                                 className="p-2.5 text-text-secondary hover:text-white transition-colors"
                                 aria-label="Sign in"
                             >

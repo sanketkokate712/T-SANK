@@ -2,6 +2,9 @@
 
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { CartItem } from "./CartContext";
+import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useFirebaseAuth } from "./FirebaseAuthContext";
 
 export interface OrderAddress {
     fullName: string;
@@ -35,43 +38,56 @@ export interface Order {
 
 interface OrderContextType {
     orders: Order[];
-    addOrder: (items: CartItem[], address: OrderAddress, total: number, paymentId: string, orderId: string) => Order;
+    addOrder: (items: CartItem[], address: OrderAddress, total: number, paymentId: string, orderId: string) => Promise<Order>;
     getOrders: () => Order[];
     isOrdersOpen: boolean;
     openOrders: () => void;
     closeOrders: () => void;
 }
 
-const STORAGE_KEY = "tsank_orders";
-
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
-
-function loadOrders(): Order[] {
-    if (typeof window === "undefined") return [];
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        return stored ? JSON.parse(stored) : [];
-    } catch {
-        return [];
-    }
-}
-
-function saveOrders(orders: Order[]) {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-}
 
 export function OrderProvider({ children }: { children: ReactNode }) {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isOrdersOpen, setIsOrdersOpen] = useState(false);
+    const { user } = useFirebaseAuth();
 
-    // Load from localStorage on mount
+    // Load orders from Firestore when user logs in
     useEffect(() => {
-        setOrders(loadOrders());
-    }, []);
+        if (!user?.uid) {
+            setOrders([]);
+            return;
+        }
+        const fetchOrders = async () => {
+            try {
+                const q = query(
+                    collection(db, "orders"),
+                    where("userId", "==", user.uid),
+                    orderBy("createdAt", "desc")
+                );
+                const snap = await getDocs(q);
+                const fetched: Order[] = snap.docs.map(d => {
+                    const data = d.data();
+                    return {
+                        ...data,
+                        id: data.id || d.id,
+                        createdAt: data.createdAt?.toDate?.()?.toISOString() ?? new Date().toISOString(),
+                    } as Order;
+                });
+                setOrders(fetched);
+            } catch {
+                // fallback: try localStorage
+                try {
+                    const stored = localStorage.getItem("tsank_orders");
+                    if (stored) setOrders(JSON.parse(stored));
+                } catch { /* ignore */ }
+            }
+        };
+        fetchOrders();
+    }, [user?.uid]);
 
     const addOrder = useCallback(
-        (items: CartItem[], address: OrderAddress, total: number, paymentId: string, orderId: string): Order => {
+        async (items: CartItem[], address: OrderAddress, total: number, paymentId: string, orderId: string): Promise<Order> => {
             const order: Order = {
                 id: `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
                 items: items.map((item) => ({
@@ -90,22 +106,33 @@ export function OrderProvider({ children }: { children: ReactNode }) {
                 createdAt: new Date().toISOString(),
             };
 
-            setOrders((prev) => {
-                const updated = [order, ...prev];
-                saveOrders(updated);
-                return updated;
-            });
+            setOrders((prev) => [order, ...prev]);
+
+            // Save to Firestore
+            try {
+                await addDoc(collection(db, "orders"), {
+                    ...order,
+                    userId: user?.uid || "guest",
+                    userEmail: user?.email || address.email,
+                    createdAt: serverTimestamp(),
+                });
+            } catch {
+                // Fallback: save to localStorage
+                const stored = localStorage.getItem("tsank_orders");
+                const prev = stored ? JSON.parse(stored) : [];
+                localStorage.setItem("tsank_orders", JSON.stringify([order, ...prev]));
+            }
 
             // Also POST to server for admin
             fetch("/api/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(order),
-            }).catch(() => { /* silent fail for server storage */ });
+            }).catch(() => { /* silent */ });
 
             return order;
         },
-        []
+        [user?.uid, user?.email]
     );
 
     const getOrders = useCallback(() => orders, [orders]);
