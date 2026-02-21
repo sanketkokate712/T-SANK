@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState, ReactNode, useCallback 
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
     signOut as firebaseSignOut,
     onAuthStateChanged,
     updatePassword,
@@ -13,7 +15,7 @@ import {
     User,
     sendPasswordResetEmail,
 } from "firebase/auth";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
 interface FirebaseUser {
@@ -37,13 +39,15 @@ interface AuthContextType {
     closeProfile: () => void;
     // Auth actions
     signIn: (email: string, password: string) => Promise<void>;
-    signUp: (name: string, email: string, password: string) => Promise<void>;
+    signUp: (displayName: string, email: string, password: string) => Promise<void>;
+    signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
     changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
     resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const googleProvider = new GoogleAuthProvider();
 
 export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -63,6 +67,8 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
                     displayName: firebaseUser.displayName,
                     photoURL: firebaseUser.photoURL,
                 });
+                // Close modal on successful login
+                setAuthModalOpen(false);
             } else {
                 setUser(null);
             }
@@ -95,21 +101,36 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
 
     const signIn = useCallback(async (email: string, password: string) => {
         await signInWithEmailAndPassword(auth, email, password);
-        setAuthModalOpen(false);
+        // Modal will close via onAuthStateChanged
     }, []);
 
-    const signUp = useCallback(async (name: string, email: string, password: string) => {
+    const signUp = useCallback(async (displayName: string, email: string, password: string) => {
+        // Step 1: Create the Firebase Auth account
         const cred = await createUserWithEmailAndPassword(auth, email, password);
-        // Set display name
-        await updateProfile(cred.user, { displayName: name });
-        // Save user profile to Firestore
-        await setDoc(doc(db, "users", cred.user.uid), {
+
+        // Step 2: Set display name on the auth user (non-blocking if fails)
+        try {
+            await updateProfile(cred.user, { displayName });
+        } catch {
+            // Non-critical — user is still created
+        }
+
+        // Step 3: Save to Firestore in the background (don't block on this)
+        setDoc(doc(db, "users", cred.user.uid), {
             uid: cred.user.uid,
-            displayName: name,
+            displayName,
             email,
             createdAt: serverTimestamp(),
+        }).catch(() => {
+            // Silent — Firestore save is not critical for auth to work
         });
-        setAuthModalOpen(false);
+
+        // Auth state change (onAuthStateChanged) will close the modal automatically
+    }, []);
+
+    const signInWithGoogle = useCallback(async () => {
+        await signInWithPopup(auth, googleProvider);
+        // Modal closes via onAuthStateChanged
     }, []);
 
     const signOut = useCallback(async () => {
@@ -127,26 +148,6 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
         await sendPasswordResetEmail(auth, email);
     }, []);
 
-    // Sync displayName from Firestore on login
-    useEffect(() => {
-        const fetchProfile = async () => {
-            if (!auth.currentUser) return;
-            try {
-                const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
-                if (snap.exists() && auth.currentUser.displayName === null) {
-                    const data = snap.data();
-                    if (data.displayName) {
-                        await updateProfile(auth.currentUser, { displayName: data.displayName });
-                        setUser(prev => prev ? { ...prev, displayName: data.displayName } : prev);
-                    }
-                }
-            } catch {
-                // silent
-            }
-        };
-        if (user) fetchProfile();
-    }, [user?.uid]);
-
     return (
         <AuthContext.Provider
             value={{
@@ -161,6 +162,7 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
                 closeProfile,
                 signIn,
                 signUp,
+                signInWithGoogle,
                 signOut,
                 changePassword,
                 resetPassword,
